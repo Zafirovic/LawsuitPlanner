@@ -1,0 +1,19 @@
+@model CreateRoleViewModel
+
+@{ ViewBag.Title = "Kreiranje uloge u sistemu"; }
+
+<h1> Kreirajte novu ulogu </h1>
+
+<div class="row">
+    <div class="col-md-12">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="roleName"></label>
+                <input asp-for="roleName" class="form-control">
+                <span asp-validation-for="roleName" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Kreirajte ulogu</button>
+        </form>
+    </div>
+</div>

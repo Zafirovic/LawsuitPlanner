@@ -1,0 +1,61 @@
+@model CompanyViewModel
+
+@{ Layout = null; }
+
+<div class="card">
+    <div class="card-header">
+        <div class="form-group col-md-3">
+            <input asp-for="name" class="form-group companyName" placeholder="Unesite naziv kompanije">
+            <span asp-validation-for="name" class="text-danger mt-3"></span>
+            <label style="color:#336699; font-family:verdana">Naziv kompanije</label>
+        </div>
+        <div class="form-group col-md-3">
+            <input asp-for="address" class="form-group companyAddress" placeholder="Unesite adresu kompanije">
+            <span asp-validation-for="address" class="text-danger mt-3"></span>
+            <label style="color:#336699; font-family:verdana">Adresa kompanije</label>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary mt-3"
+                    onclick="insertCompany()"> Unesite kompaniju </button>
+            <label>*Izmene vrsite direktnom izmenom u tabeli u zeljenom polju, a zatim klikom na dugme izmeni</label>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-responsive-md btn-table">
+            <thead>
+                <tr>
+                    <th>Id kompanije</th>
+                    <th>Naziv kompanije</th> 
+                    <th>Adresa kompanije</th>
+                </tr>
+            </thead>
+            <tbody class="companyTable">
+                @if(Model.companies.Any())
+                {   
+                    @foreach(var company in Model.companies.Reverse())
+                    {
+                        <tr>
+                            <td>@company.id</td>
+                            <td><span class=@company.id contenteditable>@company.name</span></td>
+                            <td><span class=@company.id contenteditable>@company.address</span></td>
+                            <td>
+                                <button type="button" class="btn btn-outline-primary waves-effect" 
+                                        onclick="changeCompany(@company.id)">Izmeni kompaniju</button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger waves-effect"
+                                        onclick="deleteCompany(@company.id)"> Izbrisi kompaniju</button> 
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <div class="card-header insertedCompany">
+                        Nijedna kompanija nije uneta jos uvek
+                    </div>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

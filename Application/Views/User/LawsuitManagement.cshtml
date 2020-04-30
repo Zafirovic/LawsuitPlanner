@@ -1,0 +1,16 @@
+@{ ViewBag.Title = "Planer parnica"; }
+
+<h1> Pregled i planer parnica </h1>
+<ul class="nav nav-tabs">
+   <li style="color:#336699; font-family:verdana"><a class="nav-link" href="#calen" data-toggle="tab">Kalendar parnica</a></li>
+   <li style="color:#336699; font-family:verdana"><a href="#lawsuitManage" data-toggle="tab">Upravljanje parnicama</a></li>
+
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane active" id="calen"></div>
+    <div class="tab-pane" id="lawsuitManage"></div>
+</div>
+<script src="~/js/EntitiesAjaxCRUD/Lawsuit.js" asp-append-version="true"></script>
+@* <script src="~/js/Calendar.js" asp-append-version="true"></script> *@
+

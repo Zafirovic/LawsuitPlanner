@@ -1,0 +1,72 @@
+@model LawsuitViewModel
+
+@{ Layout = null; }
+
+<div class="card">
+    <div class="card-header">
+        Pregled parnica
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-responsive-md btn-table">
+            <thead>
+                <tr>
+                    <th>Datum i vreme</th> 
+                    <th>Lokacija</th>
+                    <th>Sudija</th> 
+                    <th>Tip suda</th>
+                    <th>Identifikator</th>
+                    <th>Broj sudnice</th> 
+                    <th>Tuzilac</th>
+                    <th>Tuzenik</th>
+                    <th>Napomena</th>
+                    <th>Tip procesa</th>
+                </tr>
+            </thead>
+            <tbody class="lawsuitTable">
+                @if(Model.lawsuits.Any())
+                {
+                    @foreach(var lawsuit in Model.lawsuits.Reverse())
+                    {
+                        <tr>
+                            <td><span class=@lawsuit.id>@lawsuit.dateTimeOfEvent</span></td>
+                            <td>
+                                <div>@lawsuit.location.cityName</div>
+                            </td>
+                            <td>
+                                <div>@lawsuit.judge.name</div> 
+                            </td>
+        
+                            <td>
+                                @{var currType = (TipSuda)lawsuit.courtType;}
+                                <div>@currType</div>
+                            </td>
+
+                            <td><span class=@lawsuit.id>@lawsuit.processId</span></td>
+                            <td><span class=@lawsuit.id>@lawsuit.courtroomNumber</span></td>
+
+                            <td>
+                                <div>@lawsuit.prosecutor.name</div>
+                            </td>
+
+                            <td>
+                                <div>@lawsuit.defendant.name</div>
+                            </td>
+
+                            <td><span class=@lawsuit.id>@lawsuit.note</span></td>
+
+                            <td>
+                                <div>@lawsuit.typeOfProcess.name</div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <div class="card-header insertedLawsuit">
+                        Nijedna parnica nije uneta jos uvek
+                    </div>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

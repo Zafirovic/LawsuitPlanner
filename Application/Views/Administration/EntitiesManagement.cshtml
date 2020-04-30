@@ -1,0 +1,27 @@
+
+@{ ViewBag.Title = "Pregled domenskih entiteta"; }
+
+<h1> Izaberite domenski entitet </h1>
+<ul class="nav nav-tabs">
+   <li style="color:#336699; font-family:verdana"><a class="nav-link" href="#lokacija" data-toggle="tab">Lokacija</a></li>
+   <li style="color:#336699; font-family:verdana"><a href="#tipP" data-toggle="tab">Tip postupka</a></li>
+   <li style="color:#336699; font-family:verdana"><a href="#kontakt" data-toggle="tab">Kontakt</a></li>
+   <li style="color:#336699; font-family:verdana"><a href="#kompanija" data-toggle="tab">Kompanija</a></li>
+   <li style="color:#336699; font-family:verdana"><a href="#parnica" data-toggle="tab">Pregled parnica</a></li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane active" id="lokacija"></div>
+    <div class="tab-pane" id="tipP"></div>
+    <div class="tab-pane" id="kontakt"></div>
+    <div class="tab-pane" id="kompanija"></div>
+    <div class="tab-pane" id="parnica"></div>
+</div>
+
+<script src="~/js/EntitiesAjaxCRUD/Location.js" asp-append-version="true"></script>
+<script src="~/js/EntitiesAjaxCRUD/TypeOfProcess.js" asp-append-version="true"></script>
+<script src="~/js/EntitiesAjaxCRUD/Company.js" asp-append-version="true"></script>
+<script src="~/js/EntitiesAjaxCRUD/Contact.js" asp-append-version="true"></script>
+<script src="~/js/EntitiesAjaxCRUD/LawsuitView.js" asp-append-version="true"></script>
+
+

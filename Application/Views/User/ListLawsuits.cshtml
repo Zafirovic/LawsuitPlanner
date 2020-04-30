@@ -1,0 +1,323 @@
+@model LawsuitViewModel
+
+@{ Layout = null; }
+
+<div class="card">
+        <div class="card-header">
+            <div class="container">
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <input data-date-format="dd-mm-yyyy" style="width: 170px" class="form-control" id="datepicker" placeholder="Izaberite datum">
+                        <label style="color:#336699; font-family:verdana">Datum parnice</label>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <input style="width: 170px" class="form-control" id="timepicker" placeholder="Izaberite vreme">
+                        <label style="color:#336699; font-family:verdana">Vreme parnice</label>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <input asp-for="processId" style="width: 170px" class="form-control" id="lawsuitProcessId" placeholder="Unesite identifikator">
+                        <label style="color:#336699; font-family:verdana">Identifikator parnice</label>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <input asp-for="note" style="width: 170px" class="form-control" id="lawsuitNote" placeholder="Unesite predmet">
+                        <label style="color:#336699; font-family:verdana">Napomena</label>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <input asp-for="courtroomNumber" style="width: 170px" class="form-control" id="lawsuitCourtroom" placeholder="Unesite broj sudnice">
+                        <label style="color:#336699; font-family:verdana">Broj sudnice</label>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <div>
+                            <label style="color:#336699; font-family:verdana">Lokacija</label> 
+                            <select class="lawsuitLocation">
+                            @if(Model.locations.Any())
+                            {
+                                <option disabled selected label=" ">Izaberite lokaciju</option>
+                                @foreach(var location in Model.locations)
+                                {
+                                    <option value=@location.id>@location.cityName</option>
+                                }
+                            }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <div>
+                            <label style="color:#336699; font-family:verdana">Sudija</label> 
+                            <select class="lawsuitJudge">
+                            @if(Model.contacts.Any())
+                            {
+                                <option selected disabled label=" ">Izaberite sudiju</option>
+                                @foreach(var contact in Model.contacts)
+                                {
+                                    @if (contact.legalPerson)
+                                    {
+                                        <option value=@contact.id>@contact.name</option>
+                                    }
+                                }
+                            }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label style="color:#336699; font-family:verdana">Tip suda</label> 
+                        <select class="lawsuitCourttype" asp-for="@Model.courtType" asp-items="Html.GetEnumSelectList<TipSuda>()"></select>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <div>
+                            <label style="color:#336699; font-family:verdana">Tuzilac</label> 
+                            <select class="lawsuitProsecutor">
+                            @if(Model.contacts.Any())
+                            {
+                                <option selected disabled label=" ">Izaberite tuzioca</option>
+                                foreach(var contact in Model.contacts)
+                                {
+                                    if (!contact.legalPerson)
+                                    {
+                                        <option value=@contact.id>@contact.name</option>
+                                    }
+                                }
+                            }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <div>
+                            <label style="color:#336699; font-family:verdana">Tuzenik</label> 
+                            <select class="lawsuitDefendant">
+                            @if(Model.contacts.Any())
+                            {
+                                <option selected disabled label=" ">Izaberite tuzenika</option>
+                                foreach(var contact in Model.contacts)
+                                {
+                                    if (!contact.legalPerson)
+                                    {
+                                        <option value=@contact.id>@contact.name</option>
+                                    }
+                                }
+                            }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <div>
+                            <label style="color:#336699; font-family:verdana">Tip</label> 
+                            <select class="lawsuitProcessType">
+                            @if(Model.processes.Any())
+                            {
+                                <option selected disabled label=" ">Izaberite postupak</option>
+                                foreach(var process in Model.processes)
+                                {
+                                    <option value=@process.id>@process.name</option>
+                                }
+                            }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label style="color:#336699; font-family:verdana; vertical-align:top">Advokati</label>
+                        <select class="lawsuitLawyers" multiple>
+                            @if(Model.lawyers.Any())
+                            {
+                                @foreach(var lawyer in Model.lawyers)
+                                {
+                                    <option value=@lawyer.Id>@lawyer.name @lawyer.surname</option>
+                                }
+                            }
+                            </select>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3"
+                    onclick="insertLawsuit()"> Unesite novu parnicu </button>
+            <label>*Izmene vrsite direktnom izmenom u tabeli u zeljenom polju, a zatim klikom na dugme izmeni</label>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-responsive-md btn-table">
+            <thead>
+                <tr>
+                    <th>Datum i vreme</th> 
+                    <th>Lokacija</th>
+                    <th>Sudija</th> 
+                    <th>Tip suda</th>
+                    <th>Identifikator</th>
+                    <th>Broj sudnice</th> 
+                    <th>Tuzilac</th>
+                    <th>Tuzenik</th>
+                    <th>Napomena</th>
+                    <th>Tip procesa</th>
+                </tr>
+            </thead>
+            <tbody class="lawsuitTable">
+                @if(Model.lawsuits.Any())
+                {
+                    @foreach(var lawsuit in Model.lawsuits.Reverse())
+                    {
+                        <tr>
+                            <td><span class=@lawsuit.id contenteditable>@lawsuit.dateTimeOfEvent.ToString("dd.MM.yyyy HH:mm:ss", new System.Globalization.CultureInfo("sr-Latn-RS"))</span></td>
+                            <td>
+                                <select class="@lawsuit.id">
+                                    @if(Model.locations.Any())
+                                    {
+                                        foreach(var location in Model.locations)
+                                        {
+                                            if(lawsuit.location.cityName == location.cityName)
+                                            {
+                                                <option value=@location.id selected>@location.cityName</option>
+                                                continue;
+                                            }
+                                            <option value=@location.id>@location.cityName</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                <select class="@lawsuit.id">
+                                    @if(Model.contacts.Any())
+                                    {
+                                        @foreach(var contact in Model.contacts)
+                                        {
+                                            @if (contact.legalPerson)
+                                            {
+                                                if(lawsuit.judge.name == contact.name)
+                                                {
+                                                    <option value=@contact.id selected>@contact.name</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value=@contact.id>@contact.name</option>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </td>
+         
+                            <td>
+                                @{
+                                    var itemTypesList = new List<SelectListItem>();
+                                    itemTypesList.AddRange(Enum.GetValues(typeof(TipSuda)).Cast<TipSuda>().Select(
+                                        (item, index) => new SelectListItem
+                                        {
+                                            Text = item.ToString(),
+                                            Value = (index).ToString(),
+                                            Selected = index == lawsuit.courtType
+                                        }).ToList());
+                                }
+                                @Html.DropDownList("cType", itemTypesList, new { @class = lawsuit.id })
+                            </td>
+
+                            <td><span class=@lawsuit.id contenteditable>@lawsuit.processId</span></td>
+                            <td><span class=@lawsuit.id contenteditable>@lawsuit.courtroomNumber</span></td>
+
+                            <td>
+                                <select class="@lawsuit.id">
+                                    @if(Model.contacts.Any())
+                                    {
+                                        foreach(var contact in Model.contacts)
+                                        {
+                                            if (!contact.legalPerson)
+                                            {
+                                                if(lawsuit.prosecutor.name == contact.name)
+                                                {
+                                                    <option value=@contact.id selected>@contact.name</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value=@contact.id>@contact.name</option>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </td>
+
+                            <td>
+                                <select class="@lawsuit.id">
+                                    @if(Model.contacts.Any())
+                                    {
+                                        foreach(var contact in Model.contacts)
+                                        {
+                                            if (!contact.legalPerson)
+                                            {
+                                                if(lawsuit.defendant.name == contact.name)
+                                                {
+                                                    <option value=@contact.id selected>@contact.name</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value=@contact.id>@contact.name</option>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </td>
+
+                            <td><span class=@lawsuit.id contenteditable>@lawsuit.note</span></td>
+
+                            <td>
+                                <select class="@lawsuit.id">
+                                    @if(Model.processes.Any())
+                                    {
+                                        foreach(var process in Model.processes)
+                                        {
+                                            if(lawsuit.typeOfProcess.name == process.name)
+                                            {
+                                                <option value=@process.id selected>@process.name</option>
+                                                continue;
+                                            }
+                                            <option value=@process.id>@process.name</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+
+                            <td>
+                                <button type="button" class="btn btn-outline-primary waves-effect" 
+                                        onclick="changeLawsuit(@lawsuit.id)">Izmeni</button>
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-danger waves-effect"
+                                        onclick="deleteLawsuit(@lawsuit.id)">Izbrisi</button> 
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <div class="card-header insertedLawsuit">
+                        Nijedna parnica nije uneta jos uvek
+                    </div>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(function(){
+        $("#datepicker").datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+    })
+
+    $(function(){
+        $('#timepicker').wickedpicker({
+            twentyFour: true
+        });
+    })
+</script>
+
+

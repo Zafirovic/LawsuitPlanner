@@ -1,0 +1,51 @@
+@model TypeOfProcessViewModel
+
+@{ Layout = null; }
+
+<div class="card">
+    <div class="card-header">
+        <input asp-for="name" class="form-control processInput" placeholder="Unesite tip postupka(npr Paricni postupak)">
+            <button type="submit" class="btn btn-primary mt-3"
+                    onclick="insertTypeOfProcess()">Unesite postupak</button>
+            <label>*Izmene vrsite direktnom izmenom u tabeli u zeljenom polju, a zatim klikom na dugme izmeni</label>
+            <div>
+                <span asp-validation-for="name" class="text-danger mt-3"></span>
+            </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-responsive-md btn-table">
+            <thead>
+                <tr>
+                    <th>Id postupka</th>
+                    <th>Tip postupka</th> 
+                </tr>
+            </thead>
+            <tbody class="processTable">
+                @if(Model.processes.Any())
+                {
+                    @foreach(var process in Model.processes.Reverse())
+                    {
+                        <tr>
+                            <td>@process.id</td>
+                            <td><span id=@process.id contenteditable>@process.name</span></td>
+                            <td>
+                                <button type="button" class="btn btn-outline-primary waves-effect" 
+                                        onclick="changeTypeOfProcess(@process.id)">Izmeni</button>
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-danger waves-effect"
+                                        onclick="deleteTypeOfProcess(@process.id)"> Izbrisi</button> 
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <div class="card-header insertedTypeOfProcess">
+                        Nijedan tip postupka nije unet jos uvek
+                    </div>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

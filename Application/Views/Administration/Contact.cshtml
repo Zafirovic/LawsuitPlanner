@@ -1,0 +1,159 @@
+@model ContactCompanyViewModel
+
+@{ Layout = null; }
+
+<div class="card">
+        <div class="card-header">
+            <div class="container">
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <input asp-for="name" style="width: 170px" class="form-control" id="contactName" placeholder="Unesite ime">
+                        <label style="color:#336699; font-family:verdana">Ime</label>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <input asp-for="surname" style="width: 170px" class="form-control" id="contactSurname" placeholder="Unesite prezime">
+                        <label style="color:#336699; font-family:verdana">Prezime</label>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <input asp-for="phone1" style="width: 170px" class="form-control" id="contactPhone1" placeholder="Unesite telefon">
+                        <label style="color:#336699; font-family:verdana">Mobilni telefon</label>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <input asp-for="phone2" style="width: 170px" class="form-control" id="contactPhone2" placeholder="Unesite drugi telefon">
+                        <label style="color:#336699; font-family:verdana">Faks telefon</label>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <input asp-for="address" style="width: 170px" class="form-control" id="contactAddress" placeholder="Unesite adresu">
+                        <label style="color:#336699; font-family:verdana">Adresa</label>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <input asp-for="email" style="width: 170px" class="form-control" id="contactEmail" placeholder="Unesite email">
+                        <label style="color:#336699; font-family:verdana">Email</label>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <input asp-for="job" style="width: 170px" class="form-control" id="contactJob" placeholder="Unesite zanimanje">
+                        <label style="color:#336699; font-family:verdana">Zanimanje</label>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <label style="color:#336699; font-family:verdana">Kompanija</label> 
+                        <select class="contactsCompany">
+                        @if(Model.companies.Any())
+                        {
+                            <option selected label=" ">Izaberite kompaniju</option>
+                            foreach(var company in Model.companies)
+                            {
+                                <option value=@company.id>@company.name</option>
+                            }
+                        }
+                        </select>
+                    </div>
+                </div>
+                <div class="pt-3">
+                    <label style="color:#336699; font-family:verdana" asp-for="legalPerson">Pravno lice</label>
+                    <input id="contactCheck" asp-for="legalPerson" type="checkbox" >
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3"
+                    onclick="insertContact()"> Unesite novi kontakt </button>
+            <label>*Izmene vrsite direktnom izmenom u tabeli u zeljenom polju, a zatim klikom na dugme izmeni</label>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-responsive-md btn-table">
+            <thead>
+                <tr>
+                    <th>Ime i prezime</th> 
+                    <th>Telefon 1</th>
+                    <th>Telefon 2</th> 
+                    <th>Adresa</th>
+                    <th>Email</th>
+                    <th>Zanimanje</th> 
+                    <th>Kompanija</th>
+                    <th>Pravno ili fizicko lice</th>
+                </tr>
+            </thead>
+            <tbody class="contactTable">
+                @if(Model.contacts.Any())
+                {
+                    @foreach(var contact in Model.contacts.Reverse())
+                    {
+                        <tr>
+                            <td><span class=@contact.id contenteditable>@contact.name</span></td>
+                            <td><span class=@contact.id contenteditable>@contact.phone1</span></td>
+                            <td><span class=@contact.id contenteditable>@contact.phone2</span></td>
+                            <td><span class=@contact.id contenteditable>@contact.address</span></td>
+                            <td><span class=@contact.id contenteditable>@contact.email</span></td>
+                            <td><span class=@contact.id contenteditable>@contact.job</span></td>
+                            <td>
+                                <select class="@contact.id">
+                                    @if(Model.companies.Any())
+                                    {
+                                        if (contact.company == null)
+                                        {
+                                            <option selected label=" " value=-1>Nepoznato</option>
+                                            foreach(var company in Model.companies)
+                                            {   
+                                                <option value=@company.id>@company.name</option>
+                                            }
+                                        }
+                                        else 
+                                        {
+                                            foreach(var company in Model.companies)
+                                            {   
+                                                if(contact.company.name == company.name)
+                                                {
+                                                    <option value=@company.id selected>@company.name</option>
+                                                }   
+                                                else
+                                                {
+                                                    <option value=@company.id>@company.name</option>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </td>
+
+                            @if(contact.legalPerson)
+                            {
+                                <td>
+                                    <div>
+                                        <span class=@contact.id contenteditable>Pravno lice</span>
+                                        <input type="checkbox" class=@contact.id checked>
+                                    </div>
+                                </td>
+                                
+                            }
+                            else
+                            { 
+                                <td>
+                                    <div>
+                                        <span class=@contact.id contenteditable>Pravno lice</span>
+                                        <input type="checkbox" class=@contact.id>
+                                    </div>
+                                </td>
+                            }
+
+                            <td>
+                                <button type="button" class="btn btn-outline-primary waves-effect" 
+                                        onclick="changeContact(@contact.id)">Izmeni</button>
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-danger waves-effect"
+                                        onclick="deleteContact(@contact.id)">Izbrisi</button> 
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <div class="card-header insertedContact">
+                        Nijedan kontakt nije unet jos uvek
+                    </div>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

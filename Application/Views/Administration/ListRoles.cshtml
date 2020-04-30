@@ -1,0 +1,46 @@
+@model IEnumerable<IdentityRole>
+
+@{ ViewBag.Title = "Sve uloge u sistemu"; }
+
+<h1> Sve uloge </h1>
+
+@if(Model.Any())
+{
+    <a class="btn btn-primary mb-4" style="width: auto;"
+        asp-controller="administration" asp-action="CreateRole"> Kreirajte ulogu </a>
+
+    foreach (var uloga in Model.Reverse())
+    {
+        <div class="card mb-3">
+            <div class="card-header">
+                Id uloge: @uloga.Id
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"> @uloga.Name </h5>
+            </div>
+            <div class="card-footer">
+                <form method="post" asp-action="DeleteRole" asp-route-id=@uloga.Id>
+                    <a class="btn btn-primary" asp-controller="Administration"
+                        asp-action="EditRole" asp-route-id="@uloga.Id">Izmenite</a>
+                    <a class="btn btn-danger" asp-controller="Administration"
+                        asp-action="DeleteRole" asp-route-id="@uloga.Id">Izbrisite</a>
+                </form>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            Nijedna uloga nije kreirana jos uvek
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                Kreiraj ulogu klikom na dugme
+            </h5>
+            <a class="btn btn-primary" style="width: auto;"
+            asp-controller="administration" asp-action="CreateRole"> Kreiraj ulogu </a>
+        </div>
+    </div>
+}

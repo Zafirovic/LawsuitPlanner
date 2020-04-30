@@ -1,0 +1,70 @@
+@model LocationViewModel
+
+@if(this.ViewContext.RouteData.Values["controller"].ToString() == "Location")
+{
+    Layout = null;
+}
+
+<div class="card">
+    <div class="card-header">
+        <input asp-for="cityName" class="form-control cityInput" placeholder="Unesite naziv grada">
+            <button type="submit" class="btn btn-primary mt-3"
+                    onclick="insertCity()"> Unesite grad </button>
+            <label>*Izmene vrsite direktnom izmenom u tabeli u zeljenom polju, a zatim klikom na dugme izmeni</label>
+            <div>
+                <span asp-validation-for="cityName" class="text-danger mt-3"></span>
+            </div>
+    </div>
+    <div class="card-body">
+        <form asp-action="ListLawsuitCities" method="get">
+            <div class="form-actions no-color">
+                <p>
+                    Nadjite po nazivu grada: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                    <input type="submit" value="Trazi" class="btn btn-default" /> |
+                    <a asp-action="ListLawsuitCities">Nazad na listu</a>
+                </p>
+            </div>
+        </form>
+        <table class="table table-striped table-responsive-md btn-table">
+            <thead>
+                <tr>
+                    <th>
+                        Id grada
+                    </th>
+                    <th>
+                        <a asp-action="ListLawsuitCities" asp-route-sortOrder="@ViewBag.NameSortParm">
+                            Naziv grada
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="cityTable">
+                @if(Model.locations.Any())
+                {
+                    @foreach(var city in Model.locations.Reverse())
+                    {
+                        <tr>
+                            <td>@city.id</td>
+                            <td><span id=@city.id contenteditable>@city.cityName</span></td>
+                            <td>
+                                <button type="button" class="btn btn-outline-primary waves-effect" 
+                                        onclick="changeCity(@city.id)">Izmeni</button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger waves-effect"
+                                        onclick="deleteCity(@city.id)"> Izbrisi</button> 
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <div class="card-header insertedCity">
+                        Nema lokacija
+                    </div>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
