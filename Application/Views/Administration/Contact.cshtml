@@ -1,6 +1,9 @@
 @model ContactCompanyViewModel
 
-@{ Layout = null; }
+@if(ViewData["CurrentFilter"].ToString() == "")
+{
+    Layout = null;
+}
 
 <div class="card">
         <div class="card-header">
@@ -61,10 +64,23 @@
         </div>
     </div>
     <div class="card-body">
+        <form asp-action="ListContacts" method="get">
+            <div class="form-actions no-color">
+                <p>
+                    Nadjite po imenu i prezimenu: <input type="text" class="searchContact" name="SearchString" value="@ViewData["currentFilter"]" />
+                    <input type="submit" value="Trazite" class="btn btn-primary" /> |
+                    <a asp-controller="Administration" asp-action="EntitiesManagement">Nazad na listu</a>
+                </p>
+            </div>
+        </form>
         <table class="table table-striped table-responsive-md btn-table">
             <thead>
                 <tr>
-                    <th>Ime i prezime</th> 
+                    <th>
+                        <a asp-action="ListContacts" asp-route-sortOrder="@ViewBag.NameSortParm">
+                            Ime i prezime
+                        </a>
+                    </th> 
                     <th>Telefon 1</th>
                     <th>Telefon 2</th> 
                     <th>Adresa</th>
@@ -157,3 +173,8 @@
         </table>
     </div>
 </div>
+
+@if(ViewData["CurrentFilter"].ToString() != "")
+{
+    <script src="~/js/EntitiesAjaxCRUD/Contact.js" asp-append-version="true"></script>
+}

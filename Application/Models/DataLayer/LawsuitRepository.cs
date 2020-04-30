@@ -47,7 +47,7 @@ namespace Application.Models.DataLayer
         }
 
         //vraca parnice samo za trenutno ulogovanog korisnika(advokata)
-        public IEnumerable<Lawsuit> getForLawyer(string id)
+        public IEnumerable<Lawsuit> getForLawyer(string id, string sortOrder, string searchString)
         {
             List<LawsuitLawyer> lawyerLawsuits = (from l in context.LawsuitLawyers
                                                   where l.userId == id select l).ToList();
@@ -67,7 +67,34 @@ namespace Application.Models.DataLayer
                 lawsuits.Add(lawsuit);
             }
 
-            return lawsuits;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                lawsuits = lawsuits.Where(l => l.judge.name.Contains(searchString) || 
+                                               l.location.cityName.Contains(searchString) ||
+                                               l.courtType.ToString().Contains(searchString) ||
+                                               l.processId.Contains(searchString) ||
+                                               l.courtroomNumber.Contains(searchString) ||
+                                               l.prosecutor.name.Contains(searchString) ||
+                                               l.defendant.name.Contains(searchString) ||
+                                               l.note.Contains(searchString) ||
+                                               l.typeOfProcess.name.Contains(searchString)).ToList();
+            }
+            
+            switch (sortOrder)
+            {
+                case "judgeName_desc":
+                    return lawsuits.OrderByDescending(s => s.judge.name).ToList();
+                case "courtTypeName_desc":
+                    return lawsuits.OrderByDescending(s => s.typeOfProcess.name).ToList();
+                case "prosecutorName_desc":
+                    return lawsuits.OrderByDescending(s => s.prosecutor.name).ToList();
+                case "defendantTypeName_desc":
+                    return lawsuits.OrderByDescending(s => s.defendant.name).ToList();
+                case "dateTime_desc":
+                    return lawsuits.OrderByDescending(s => s.dateTimeOfEvent).ToList();
+                default:
+                    return lawsuits.OrderByDescending(s => s.courtType).ToList();
+            }
         }
 
         public IEnumerable<Lawsuit> getAll()

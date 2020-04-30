@@ -9,6 +9,6 @@ namespace Application.Models.DataLayer
         Lawsuit add(Lawsuit lawsuit);
         Lawsuit update(Lawsuit lawsuit);
         Lawsuit delete(int id);
-        IEnumerable<Lawsuit> getForLawyer(string id);
+        IEnumerable<Lawsuit> getForLawyer(string id, string sortOrder, string searchString);
     }
 }

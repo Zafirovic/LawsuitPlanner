@@ -1,3 +1,4 @@
+using System;
 using Application.Models;
 using Application.Models.DataLayer;
 using Application.ViewModel;
@@ -17,10 +18,13 @@ namespace Application.Controllers
         }
 
         [HttpGet]
-        public ActionResult ListCompanies()
+        public ActionResult ListCompanies(string sortOrder, string SearchString)
         {   
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["CurrentFilter"] = String.IsNullOrEmpty(SearchString) ? "" : SearchString;
+
             CompanyViewModel model = new CompanyViewModel();
-            model.companies = this.companyRepository.getAll();
+            model.companies = this.companyRepository.getAll(sortOrder, SearchString);
 
             return View("../Administration/Companies", model);
         }

@@ -24,8 +24,8 @@ namespace Application.Controllers
         private readonly UserManager<User> userManager;
 
         public LawsuitController(ILawsuitRepository lawRepository, ILocationRepository locRepository,
-                              IContactRepository conRepository, ITypeOfProcessRepository tRepository,
-                              LawsuitDataContext context, UserManager<User> userManager)
+                                    IContactRepository conRepository, ITypeOfProcessRepository tRepository,
+                                    LawsuitDataContext context, UserManager<User> userManager)
         {
             this.lawsuitRepository = lawRepository;
             this.locationRepository = locRepository;
@@ -36,13 +36,21 @@ namespace Application.Controllers
         }
 
         [HttpGet]
-        public ViewResult ListLawsuits()
+        public ViewResult ListLawsuits(string sortOrder, string SearchString)
         {
+            ViewData["DateTimeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "dateTime_desc" : "";
+            ViewData["JudgeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "judgeName_desc" : "";
+            ViewData["CourtTypeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "courtTypeName_desc" : "";
+            ViewData["ProsecutorSortParm"] = String.IsNullOrEmpty(sortOrder) ? "prosecutorName_desc" : "";
+            ViewData["DefendantParm"] = String.IsNullOrEmpty(sortOrder) ? "defendantTypeName_desc" : "";
+
+            ViewData["CurrentFilter"] = String.IsNullOrEmpty(SearchString) ? "" : SearchString;
+
             LawsuitViewModel model = new LawsuitViewModel();
-            model.lawsuits = this.lawsuitRepository.getForLawyer(userManager.GetUserId(HttpContext.User));
-            model.contacts = this.contactRepository.getAll();
+            model.lawsuits = this.lawsuitRepository.getForLawyer(userManager.GetUserId(HttpContext.User), sortOrder, SearchString);
+            model.contacts = this.contactRepository.getAll("name_desc", "");
             model.locations = this.locationRepository.getAll("name_desc", "");
-            model.processes = this.typeOfRepository.getAll();
+            model.processes = this.typeOfRepository.getAll("name_desc", "");
             model.lawyers = context.Users.ToList();
 
             return View("../User/ListLawsuits", model);
@@ -64,7 +72,7 @@ namespace Application.Controllers
         public IEnumerable<Lawsuit> ListLawsuitsCalendar()
         {
             var userId = userManager.GetUserId(HttpContext.User);
-            return this.lawsuitRepository.getForLawyer(userId);
+            return this.lawsuitRepository.getForLawyer(userId, "name_desc", "");
         }
 
         [HttpPost]
@@ -100,10 +108,10 @@ namespace Application.Controllers
             if (lawyers.Contains(userManager.GetUserId(HttpContext.User)))
             {
                 model.locations = this.locationRepository.getAll("name_desc", "");
-                model.contacts = this.contactRepository.getAll();
+                model.contacts = this.contactRepository.getAll("name_desc", "");
                 model.courtTypes = Enum.GetValues(typeof(TipSuda)).Cast<TipSuda>()
                                     .ToDictionary(e => (int)e, e => e.ToString());
-                model.processes = this.typeOfRepository.getAll();
+                model.processes = this.typeOfRepository.getAll("name_desc", "");
                 return model;
             }
             return null;

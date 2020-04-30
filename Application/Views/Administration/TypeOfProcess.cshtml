@@ -1,6 +1,10 @@
 @model TypeOfProcessViewModel
 
-@{ Layout = null; }
+@if(ViewData["CurrentFilter"].ToString() == "")
+{
+    Layout = null;
+}
+@* @{ Layout = null; } *@
 
 <div class="card">
     <div class="card-header">
@@ -13,11 +17,24 @@
             </div>
     </div>
     <div class="card-body">
+        <form asp-action="ListTypeOfProcess" method="get">
+            <div class="form-actions no-color">
+                <p>
+                    Nadjite po nazivu postupka: <input type="text" class="searchProcess" name="SearchString" value="@ViewData["currentFilter"]" />
+                    <input type="submit" value="Trazite" class="btn btn-primary" /> |
+                    <a asp-controller="Administration" asp-action="EntitiesManagement">Nazad na listu</a>
+                </p>
+            </div>
+        </form>
         <table class="table table-striped table-responsive-md btn-table">
             <thead>
                 <tr>
                     <th>Id postupka</th>
-                    <th>Tip postupka</th> 
+                    <th>
+                        <a asp-action="ListTypeOfProcess" asp-route-sortOrder="@ViewBag.NameSortParm">
+                                Tip postupka
+                        </a>
+                    </th>
                 </tr>
             </thead>
             <tbody class="processTable">
@@ -49,3 +66,8 @@
         </table>
     </div>
 </div>
+
+@if(ViewData["CurrentFilter"].ToString() != "")
+{
+    <script src="~/js/EntitiesAjaxCRUD/TypeOfProcess.js" asp-append-version="true"></script>
+}

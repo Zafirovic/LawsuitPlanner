@@ -1,7 +1,9 @@
 @model LawsuitViewModel
 
-@{ Layout = null; }
-
+@if(ViewData["CurrentFilter"].ToString() == "")
+{
+    Layout = null;
+}
 <div class="card">
         <div class="card-header">
             <div class="container">
@@ -144,17 +146,46 @@
         </div>
     </div>
     <div class="card-body">
+        <form asp-action="ListLawsuits" method="get">
+            <div class="form-actions no-color">
+                <p>
+                    Pretrazite po parametrima parnice: <input type="text" class="searchJugde" name="SearchString" value="@ViewData["currentFilter"]" />
+                    <input type="submit" value="Trazite" class="btn btn-primary" /> |
+                    <a asp-controller="User" asp-action="LawsuitManagement">Nazad na listu</a>
+                </p>
+            </div>
+        </form>
         <table class="table table-striped table-responsive-md btn-table">
             <thead>
                 <tr>
-                    <th>Datum i vreme</th> 
+                    <th>
+                        <a asp-action="ListLawsuits" asp-route-sortOrder="@ViewBag.DateTimeSortParm">
+                            Datum i vreme
+                        </a>
+                    </th> 
                     <th>Lokacija</th>
-                    <th>Sudija</th> 
-                    <th>Tip suda</th>
+                    <th>
+                        <a asp-action="ListLawsuits" asp-route-sortOrder="@ViewBag.JudgeSortParm">
+                            Sudija
+                        </a>
+                    </th> 
+                    <th>
+                        <a asp-action="ListLawsuits" asp-route-sortOrder="@ViewBag.CourtTypeSortParm">
+                            Tip suda
+                        </a>
+                    </th>
                     <th>Identifikator</th>
                     <th>Broj sudnice</th> 
-                    <th>Tuzilac</th>
-                    <th>Tuzenik</th>
+                    <th>
+                        <a asp-action="ListLawsuits" asp-route-sortOrder="@ViewBag.ProsecutorSortParm">
+                            Tuzilac
+                        </a>
+                    </th>
+                    <th>
+                        <a asp-action="ListLawsuits" asp-route-sortOrder="@ViewBag.DefendantParm">
+                            Tuzenik
+                        </a>
+                    </th>
                     <th>Napomena</th>
                     <th>Tip procesa</th>
                 </tr>
@@ -306,6 +337,11 @@
     </div>
 </div>
 
+@if(ViewData["CurrentFilter"].ToString() != "")
+{
+    <script src="~/js/EntitiesAjaxCRUD/Lawsuit.js" asp-append-version="true"></script>
+}
+
 <script>
     $(function(){
         $("#datepicker").datepicker({
@@ -319,5 +355,4 @@
         });
     })
 </script>
-
 

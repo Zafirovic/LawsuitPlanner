@@ -1,6 +1,6 @@
 @model LocationViewModel
 
-@if(this.ViewContext.RouteData.Values["controller"].ToString() == "Location")
+@if(ViewData["CurrentFilter"].ToString() == "")
 {
     Layout = null;
 }
@@ -19,9 +19,9 @@
         <form asp-action="ListLawsuitCities" method="get">
             <div class="form-actions no-color">
                 <p>
-                    Nadjite po nazivu grada: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
-                    <input type="submit" value="Trazi" class="btn btn-default" /> |
-                    <a asp-action="ListLawsuitCities">Nazad na listu</a>
+                    Nadjite po nazivu grada: <input type="text" class="searchCity" name="SearchString" value="@ViewData["currentFilter"]" />
+                    <input type="submit" value="Trazite" class="btn btn-primary" /> |
+                    <a asp-controller="Administration" asp-action="EntitiesManagement">Nazad na listu</a>
                 </p>
             </div>
         </form>
@@ -68,3 +68,7 @@
     </div>
 </div>
 
+@if(ViewData["CurrentFilter"].ToString() != "")
+{
+    <script src="~/js/EntitiesAjaxCRUD/Location.js" asp-append-version="true"></script>
+}

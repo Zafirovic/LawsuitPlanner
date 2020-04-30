@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Application.Models.DataAccess;
 using System.Linq;
+using System;
 
 namespace Application.Models.DataLayer
 {
@@ -43,9 +44,22 @@ namespace Application.Models.DataLayer
                     select a).FirstOrDefault();
         }
 
-        public IEnumerable<TypeOfProcess> getAll()
+        public IEnumerable<TypeOfProcess> getAll(string sortOrder, string searchString)
         {
-            return context.TypeOfProcesses;
+            IEnumerable<TypeOfProcess> types = context.TypeOfProcesses;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                types = types.Where(l => l.name.Contains(searchString));
+            }
+            
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    return types.OrderByDescending(s => s.name).ToList();
+                default:
+                    return types.OrderBy(s => s.name).ToList();
+            }
         }
 
         public TypeOfProcess update(TypeOfProcess typeOfProcess)

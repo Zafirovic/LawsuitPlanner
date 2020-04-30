@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Application.Models.DataAccess;
 
 namespace Application.Models.DataLayer
@@ -33,6 +35,24 @@ namespace Application.Models.DataLayer
         public Company get(int id)
         {
             return context.Companies.Find(id);
+        }
+
+        public IEnumerable<Company> getAll(string sortOrder, string searchString)
+        {
+            IEnumerable<Company> companies = context.Companies;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                companies = companies.Where(l => l.name.Contains(searchString));
+            }
+            
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    return companies.OrderByDescending(s => s.name).ToList();
+                default:
+                    return companies.OrderBy(s => s.name).ToList();
+            }
         }
 
         public IEnumerable<Company> getAll()

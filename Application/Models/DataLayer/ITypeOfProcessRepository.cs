@@ -6,7 +6,7 @@ namespace Application.Models.DataLayer
     {
         TypeOfProcess get(int id);
         TypeOfProcess get(string name);
-        IEnumerable<TypeOfProcess> getAll();
+        IEnumerable<TypeOfProcess> getAll(string sortOrder, string searchString);
         TypeOfProcess add(TypeOfProcess typeOfProcess);
         TypeOfProcess update(TypeOfProcess typeOfProcess);
         TypeOfProcess delete(int id);

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.ViewModel;
 using Application.Models;
 using Microsoft.AspNetCore.Authorization;
+using System;
 
 namespace Application.Controllers
 {
@@ -19,10 +20,13 @@ namespace Application.Controllers
         }
 
         [HttpGet]
-        public ActionResult ListContacts()
+        public ActionResult ListContacts(string sortOrder, string SearchString)
         {   
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["CurrentFilter"] = String.IsNullOrEmpty(SearchString) ? "" : SearchString;
+
             ContactCompanyViewModel model = new ContactCompanyViewModel();
-            model.contacts = this.contactRepository.getAll();
+            model.contacts = this.contactRepository.getAll(sortOrder, SearchString);
             model.companies = this.companyRepository.getAll();
 
             return View("../Administration/Contact", model);

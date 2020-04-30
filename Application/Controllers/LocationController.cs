@@ -23,7 +23,7 @@ namespace Application.Controllers
         public ActionResult ListLawsuitCities(string sortOrder, string SearchString)
         {   
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["CurrentFilter"] = SearchString;
+            ViewData["CurrentFilter"] = String.IsNullOrEmpty(SearchString) ? "" : SearchString;
 
             LocationViewModel model = new LocationViewModel();
             model.locations = this.locationRepository.getAll(sortOrder, SearchString);

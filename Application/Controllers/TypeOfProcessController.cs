@@ -1,3 +1,4 @@
+using System;
 using Application.Models;
 using Application.Models.DataLayer;
 using Application.ViewModel;
@@ -17,10 +18,13 @@ namespace Application.Controllers
         }
 
         [HttpGet]
-        public ActionResult ListTypeOfProcess()
+        public ActionResult ListTypeOfProcess(string sortOrder, string SearchString)
         {   
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["CurrentFilter"] = String.IsNullOrEmpty(SearchString) ? "" : SearchString;
+
             TypeOfProcessViewModel model = new TypeOfProcessViewModel();
-            model.processes = this.processRepository.getAll();
+            model.processes = this.processRepository.getAll(sortOrder, SearchString);
 
             return View("../Administration/TypeOfProcess", model);
         }

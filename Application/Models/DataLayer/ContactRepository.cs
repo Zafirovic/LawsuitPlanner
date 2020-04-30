@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Application.Models.DataAccess;
 
 namespace Application.Models.DataLayer
@@ -35,9 +37,22 @@ namespace Application.Models.DataLayer
             return context.Contacts.Find(id);
         }
 
-        public IEnumerable<Contact> getAll()
+        public IEnumerable<Contact> getAll(string sortOrder, string searchString)
         {
-            return context.Contacts;
+            IEnumerable<Contact> contacts = context.Contacts;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                contacts = contacts.Where(l => l.name.Contains(searchString));
+            }
+            
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    return contacts.OrderByDescending(s => s.name).ToList();
+                default:
+                    return contacts.OrderBy(s => s.name).ToList();
+            }
         }
 
         public Contact update(Contact contact)
