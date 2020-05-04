@@ -50,9 +50,9 @@ namespace Application.Models.DataLayer
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                locations = locations.Where(l => l.cityName.Contains(searchString));
+                locations = locations.Where(l => l.cityName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
             }
-            
+
             switch (sortOrder)
             {
                 case "name_desc":

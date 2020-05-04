@@ -69,15 +69,16 @@ namespace Application.Models.DataLayer
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                lawsuits = lawsuits.Where(l => l.judge.name.Contains(searchString) || 
-                                               l.location.cityName.Contains(searchString) ||
-                                               l.courtType.ToString().Contains(searchString) ||
-                                               l.processId.Contains(searchString) ||
-                                               l.courtroomNumber.Contains(searchString) ||
-                                               l.prosecutor.name.Contains(searchString) ||
-                                               l.defendant.name.Contains(searchString) ||
-                                               l.note.Contains(searchString) ||
-                                               l.typeOfProcess.name.Contains(searchString)).ToList();
+                lawsuits = lawsuits.Where(l => l.judge.name.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0 || 
+                                               l.location.cityName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                               ((TipSuda)l.courtType).ToString().IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                               l.processId.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                               l.courtroomNumber.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                               l.prosecutor.name.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                               l.defendant.name.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                               l.note.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                               l.typeOfProcess.name.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0)
+                                    .ToList();
             }
             
             switch (sortOrder)

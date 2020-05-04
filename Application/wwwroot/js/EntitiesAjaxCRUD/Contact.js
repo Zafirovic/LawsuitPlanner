@@ -9,6 +9,21 @@ $.ajax({
     }
 })
 
+function searchContact(sortOrder)
+{
+    $.ajax({
+        url: '/Contact/ListContacts',
+        type: "GET",
+        data: { sortOrder: sortOrder },
+        success: function(data){
+            $("#kontakt").html(data);
+        },
+        error: function(err){
+            console.log(err);
+        }
+    })
+}
+
 function insertContact()
 {
     var ime = $("#contactName").val();

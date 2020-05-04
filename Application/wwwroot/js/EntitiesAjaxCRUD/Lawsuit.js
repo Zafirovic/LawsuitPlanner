@@ -20,6 +20,21 @@ $.ajax({
     }
 })
 
+function searchLawsuit(sortOption)
+{
+    $.ajax({
+        url: '/Lawsuit/ListLawsuits',
+        type: "GET",
+        data: { sortOrder: sortOption },
+        success: function(data){
+            $("#lawsuitManage").html(data);
+        },
+        error: function(err){
+            console.log(err);
+        }
+    })
+}
+
 function insertLawsuit()
 {
     var errors = lawsuitInsertValidation();
@@ -117,21 +132,44 @@ function changeLawsuit(id)
     var dt = moment({ year: dateArray[2], month: dateArray[1] - 1, day: dateArray[0], 
         hour: timeArray[0], minute: timeArray[1] }).format();
 
+    var processId = lawsuit.eq(4).html(); 
+    var courtroomNum = lawsuit.eq(5).html();
+    var note = lawsuit.eq(8).html();
+    
+    if (processId.length == 0 || processId.length > 15)
+    {
+        alert("Nema identifikatora ili je premasen limit od 15 karaktera. Postavlja se na izmeni dok ne izvrsite izmenu");
+        lawsuit.eq(4).html("Izmeni");
+        return;
+    }
+
+    if (courtroomNum.length == 0 || courtroomNum.length > 5)
+    {
+        alert("Nema identifikatora ili je premasen limit od 15 karaktera. Postavlja se na -- dok ne izvrsite izmenu");
+        lawsuit.eq(5).html("--");
+        return;
+    }
+
+    if (note.length == 0 || note.length > 30)
+    {
+        alert("Nema napomene ili je premasen limit od 30 karaktera. Postavlja se na izmeni dok ne izvrsite izmenu");
+        lawsuit.eq(8).html("Izmeni");
+        return;
+    }
+
     var data = {
         id: id,
         dateTimeOfEvent: dt,
         location: lawsuitSelectedFields.eq(0).val(),
         judge: lawsuitSelectedFields.eq(1).val(),
         courtType: lawsuitSelectedFields.eq(2).val(),
-        processId: lawsuit.eq(4).html(),
-        courtroomNumber: lawsuit.eq(5).html(),
-        note: lawsuit.eq(8).html(),
+        processId: processId,
+        courtroomNumber: courtroomNum,
+        note: note,
         prosecutor: lawsuitSelectedFields.eq(3).val(),
         defendant: lawsuitSelectedFields.eq(4).val(),
         typeOfProcess: lawsuitSelectedFields.eq(5).val(),
     };
-    console.log(data);
-    console.log(lawsuit);
 
     $.ajax({
         type: "POST",

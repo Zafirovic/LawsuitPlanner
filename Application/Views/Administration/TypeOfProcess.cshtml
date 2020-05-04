@@ -4,7 +4,6 @@
 {
     Layout = null;
 }
-@* @{ Layout = null; } *@
 
 <div class="card">
     <div class="card-header">
@@ -17,10 +16,10 @@
             </div>
     </div>
     <div class="card-body">
-        <form asp-action="ListTypeOfProcess" method="get">
+        <form asp-action="ListTypeOfProcess" id="searchTypeOfProcess" method="get">
             <div class="form-actions no-color">
                 <p>
-                    Nadjite po nazivu postupka: <input type="text" class="searchProcess" name="SearchString" value="@ViewData["currentFilter"]" />
+                    Pretrazite po nazivu postupka: <input type="text" id="typeOfProcessInput" name="SearchString" value="@ViewData["currentFilter"]" />
                     <input type="submit" value="Trazite" class="btn btn-primary" /> |
                     <a asp-controller="Administration" asp-action="EntitiesManagement">Nazad na listu</a>
                 </p>
@@ -30,10 +29,8 @@
             <thead>
                 <tr>
                     <th>Id postupka</th>
-                    <th>
-                        <a asp-action="ListTypeOfProcess" asp-route-sortOrder="@ViewBag.NameSortParm">
-                                Tip postupka
-                        </a>
+                    <th role="button" onclick="searchTypeOfProcess('@ViewBag.NameSortParm')" style="color: #336699;">
+                        Tip postupka
                     </th>
                 </tr>
             </thead>
@@ -67,7 +64,18 @@
     </div>
 </div>
 
-@if(ViewData["CurrentFilter"].ToString() != "")
-{
-    <script src="~/js/EntitiesAjaxCRUD/TypeOfProcess.js" asp-append-version="true"></script>
-}
+<script>
+$('#searchTypeOfProcess').submit(function(e){
+    e.preventDefault();
+    var searchInput = $('#typeOfProcessInput').val();
+    if (searchInput.length < 1)
+    {
+        alert("Morate uneti vrednost za pretragu");
+        return false;
+    }
+    else
+    {
+        $('#searchTypeOfProcess')[0].submit();
+    }
+})
+</script>

@@ -43,7 +43,7 @@ namespace Application.Models.DataLayer
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                companies = companies.Where(l => l.name.Contains(searchString));
+                companies = companies.Where(l => l.name.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
             }
             
             switch (sortOrder)

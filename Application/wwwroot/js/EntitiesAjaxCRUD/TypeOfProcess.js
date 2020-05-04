@@ -9,6 +9,21 @@ $.ajax({
     }
 })
 
+function searchTypeOfProcess(sort)
+{
+    $.ajax({
+        url: '/TypeOfProcess/ListTypeOfProcess',
+        type: "GET",
+        data: { sortOrder: sortOrder},
+        success: function(data){
+            $("#tipP").html(data);
+        },
+        error: function(err){
+            console.log(err);
+        }
+    })
+}
+
 function insertTypeOfProcess()
 {
     var process = $(".processInput").val();

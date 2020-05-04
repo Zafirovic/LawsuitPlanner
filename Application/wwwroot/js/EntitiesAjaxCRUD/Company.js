@@ -9,6 +9,22 @@ $.ajax({
     }
 })
 
+function searchCompany(sortOrder)
+{
+    $.ajax({
+        url: '/Company/ListCompanies',
+        type: "GET",
+        data: { sortOrder: sortOrder },
+        success: function(data){
+            $("#kompanija").html(data);
+        },
+        error: function(err){
+            console.log(err);
+        }
+    })
+    
+}
+
 function insertCompany()
 {
     var name = $(".companyName").val();

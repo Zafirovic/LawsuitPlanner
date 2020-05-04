@@ -9,6 +9,21 @@ $.ajax({
     }
 })
 
+function searchCity(sortOrder)
+{
+    $.ajax({
+        url: '/Location/ListLawsuitCities',
+        type: "GET",
+        data: { sortOrder: sortOrder},
+        success: function(data){
+            $("#lokacija").html(data);
+        },
+        error: function(err){
+            console.log(err);
+        }
+    })
+}
+
 function insertCity()
 {
     var city = $(".cityInput").val();

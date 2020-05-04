@@ -64,10 +64,10 @@
         </div>
     </div>
     <div class="card-body">
-        <form asp-action="ListContacts" method="get">
+        <form asp-action="ListContacts" id="searchContact" method="get">
             <div class="form-actions no-color">
                 <p>
-                    Nadjite po imenu i prezimenu: <input type="text" class="searchContact" name="SearchString" value="@ViewData["currentFilter"]" />
+                    Pretrazite po parametrima kontakta: <input type="text" id="contactInput" name="SearchString" value="@ViewData["currentFilter"]" />
                     <input type="submit" value="Trazite" class="btn btn-primary" /> |
                     <a asp-controller="Administration" asp-action="EntitiesManagement">Nazad na listu</a>
                 </p>
@@ -76,10 +76,8 @@
         <table class="table table-striped table-responsive-md btn-table">
             <thead>
                 <tr>
-                    <th>
-                        <a asp-action="ListContacts" asp-route-sortOrder="@ViewBag.NameSortParm">
-                            Ime i prezime
-                        </a>
+                    <th role="button" onclick="searchContact('@ViewBag.NameSortParm')" style="color: #336699;">
+                        Ime i prezime
                     </th> 
                     <th>Telefon 1</th>
                     <th>Telefon 2</th> 
@@ -174,7 +172,18 @@
     </div>
 </div>
 
-@if(ViewData["CurrentFilter"].ToString() != "")
-{
-    <script src="~/js/EntitiesAjaxCRUD/Contact.js" asp-append-version="true"></script>
-}
+<script>
+$('#searchContact').submit(function(e){
+    e.preventDefault();
+    var searchInput = $('#contactInput').val();
+    if (searchInput.length < 1)
+    {
+        alert("Morate uneti vrednost za pretragu");
+        return false;
+    }
+    else
+    {
+        $('#searchContact')[0].submit();
+    }
+})
+</script>

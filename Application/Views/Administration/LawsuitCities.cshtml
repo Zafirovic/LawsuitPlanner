@@ -16,10 +16,10 @@
             </div>
     </div>
     <div class="card-body">
-        <form asp-action="ListLawsuitCities" method="get">
+        <form asp-action="ListLawsuitCities" id="searchCity" method="get">
             <div class="form-actions no-color">
                 <p>
-                    Nadjite po nazivu grada: <input type="text" class="searchCity" name="SearchString" value="@ViewData["currentFilter"]" />
+                    Pretrazite po nazivu grada: <input type="text" id="cityInput" name="SearchString" value="@ViewData["currentFilter"]" />
                     <input type="submit" value="Trazite" class="btn btn-primary" /> |
                     <a asp-controller="Administration" asp-action="EntitiesManagement">Nazad na listu</a>
                 </p>
@@ -31,10 +31,8 @@
                     <th>
                         Id grada
                     </th>
-                    <th>
-                        <a asp-action="ListLawsuitCities" asp-route-sortOrder="@ViewBag.NameSortParm">
-                            Naziv grada
-                        </a>
+                    <th role="button" onclick="searchCity('@ViewBag.NameSortParm')" style="color: #336699;">
+                        Naziv grada
                     </th>
                 </tr>
             </thead>
@@ -68,7 +66,18 @@
     </div>
 </div>
 
-@if(ViewData["CurrentFilter"].ToString() != "")
-{
-    <script src="~/js/EntitiesAjaxCRUD/Location.js" asp-append-version="true"></script>
-}
+<script>
+$('#searchCity').submit(function(e){
+    e.preventDefault();
+    var searchInput = $('#cityInput').val();
+    if (searchInput.length < 1)
+    {
+        alert("Morate uneti vrednost za pretragu");
+        return false;
+    }
+    else
+    {
+        $('#searchCity')[0].submit();
+    }
+})
+</script>

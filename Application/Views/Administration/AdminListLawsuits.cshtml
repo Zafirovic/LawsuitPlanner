@@ -28,7 +28,7 @@
                     @foreach(var lawsuit in Model.lawsuits.Reverse())
                     {
                         <tr>
-                            <td><span class=@lawsuit.id>@lawsuit.dateTimeOfEvent</span></td>
+                            <td><span class=@lawsuit.id contenteditable>@lawsuit.dateTimeOfEvent.ToString("dd.MM.yyyy HH:mm:ss", new System.Globalization.CultureInfo("sr-Latn-RS"))</span></td>
                             <td>
                                 <div>@lawsuit.location.cityName</div>
                             </td>

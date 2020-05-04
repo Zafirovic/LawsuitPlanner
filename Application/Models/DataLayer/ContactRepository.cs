@@ -43,7 +43,13 @@ namespace Application.Models.DataLayer
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                contacts = contacts.Where(l => l.name.Contains(searchString));
+                contacts = contacts.Where(l => l.name.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                               l.phone1.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                               l.phone2.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                               l.address.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                               l.email.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                               l.job.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0)
+                                    .ToList();
             }
             
             switch (sortOrder)
