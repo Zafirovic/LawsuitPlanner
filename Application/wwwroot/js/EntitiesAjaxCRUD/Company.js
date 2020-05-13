@@ -1,3 +1,4 @@
+//appending partial view ListCompanies to EntitiesManagement view
 $.ajax({
     url: '/Company/ListCompanies',
     type: "GET",
@@ -9,7 +10,8 @@ $.ajax({
     }
 })
 
-function searchCompany(sortOrder)
+//sorting when <th> is clicked in the table
+function sortCompany(sortOrder)
 {
     $.ajax({
         url: '/Company/ListCompanies',
@@ -85,32 +87,8 @@ function changeCompany(id)
 {
     var name = $("."+id).eq(0).html();
     var address = $("."+id).eq(1).html();
-    if (name.length == 0)
-    {
-        if (address.length == 0)
-        {
-            alert("Polja ne smeju biti prazna. Postavljaju se na izmeni dok ne izvrsite promenu!");
-            $("."+id).eq(0).html("Izmeni");
-            $("."+id).eq(1).html("Izmeni");
-            return;
-        }
-        alert("Polje ne sme ostati prazno. Postavlja se na izmeni dok ne izvrsite promenu!");
-        $("."+id).eq(0).html("Izmeni");
-        return;
-    }
-    if (address.length == 0)
-    {
-        if (name.length == 0)
-        {
-            alert("Polja ne smeju biti prazna. Postavljaju se na izmeni dok ne izvrsite promenu!");
-            $("."+id).eq(0).html("Izmeni");
-            $("."+id).eq(1).html("Izmeni");
-            return;
-        }
-        alert("Polje ne sme ostati prazno. Postavlja se na izmeni dok ne izvrsite promenu!");
-        $("."+id).eq(1).html("Izmeni");
-        return;
-    }
+
+    companyUpdateValidation(name, address, id);
 
     var data = {
         name: name,
@@ -132,4 +110,27 @@ function changeCompany(id)
             alert(error);
         }
     });
+}
+
+function companyUpdateValidation(name, address, id)
+{
+    if (name.length == 0)
+    {
+        if (address.length == 0)
+        {
+            alert("Polja ne smeju biti prazna. Postavljaju se na izmeni dok ne izvrsite promenu!");
+            $("."+id).eq(0).html("Izmeni");
+            $("."+id).eq(1).html("Izmeni");
+            return;
+        }
+        alert("Polje ne sme ostati prazno. Postavlja se na izmeni dok ne izvrsite promenu!");
+        $("."+id).eq(0).html("Izmeni");
+        return;
+    }
+    if (address.length == 0)
+    {
+        alert("Polje ne sme ostati prazno. Postavlja se na izmeni dok ne izvrsite promenu!");
+        $("."+id).eq(1).html("Izmeni");
+        return;
+    }
 }

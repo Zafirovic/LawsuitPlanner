@@ -67,8 +67,8 @@
 <script>
 $('#searchTypeOfProcess').submit(function(e){
     e.preventDefault();
-    var searchInput = $('#typeOfProcessInput').val();
-    if (searchInput.length < 1)
+    
+    if ($('#typeOfProcessInput').val().length < 1)
     {
         alert("Morate uneti vrednost za pretragu");
         return false;

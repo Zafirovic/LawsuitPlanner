@@ -91,7 +91,7 @@
             <tbody class="contactTable">
                 @if(Model.contacts.Any())
                 {
-                    @foreach(var contact in Model.contacts.Reverse())
+                    foreach(var contact in Model.contacts.Reverse())
                     {
                         <tr>
                             <td><span class=@contact.id contenteditable>@contact.name</span></td>
@@ -102,9 +102,9 @@
                             <td><span class=@contact.id contenteditable>@contact.job</span></td>
                             <td>
                                 <select class="@contact.id">
-                                    @if(Model.companies.Any())
+                                    if(Model.companies.Any())
                                     {
-                                        if (contact.company == null)
+                                        @if (contact.company == null)
                                         {
                                             <option selected label=" " value=-1>Nepoznato</option>
                                             foreach(var company in Model.companies)

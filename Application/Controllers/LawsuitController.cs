@@ -16,23 +16,24 @@ namespace Application.Controllers
     [Authorize]
     public class LawsuitController : Controller
     {
+        private readonly LawsuitDataContext context;
+        private readonly UserManager<User> userManager;
         private readonly ILawsuitRepository lawsuitRepository;
         private readonly ILocationRepository locationRepository;
         private readonly IContactRepository contactRepository;
         private readonly ITypeOfProcessRepository typeOfRepository;
-        private readonly LawsuitDataContext context;
-        private readonly UserManager<User> userManager;
 
         public LawsuitController(ILawsuitRepository lawRepository, ILocationRepository locRepository,
                                     IContactRepository conRepository, ITypeOfProcessRepository tRepository,
                                     LawsuitDataContext context, UserManager<User> userManager)
         {
+            this.context = context;
+            this.userManager = userManager; //used for getting data for particular lawyer
+            
             this.lawsuitRepository = lawRepository;
             this.locationRepository = locRepository;
             this.contactRepository = conRepository;
             this.typeOfRepository = tRepository;
-            this.context = context;
-            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -47,6 +48,7 @@ namespace Application.Controllers
             ViewData["CurrentFilter"] = String.IsNullOrEmpty(SearchString) ? "" : SearchString;
 
             LawsuitViewModel model = new LawsuitViewModel();
+            
             model.lawsuits = this.lawsuitRepository.getForLawyer(userManager.GetUserId(HttpContext.User), sortOrder, SearchString);
             model.contacts = this.contactRepository.getAll("name_desc", "");
             model.locations = this.locationRepository.getAll("name_desc", "");
@@ -107,11 +109,13 @@ namespace Application.Controllers
 
             if (lawyers.Contains(userManager.GetUserId(HttpContext.User)))
             {
+                model.id = lawsuit.id;
                 model.locations = this.locationRepository.getAll("name_desc", "");
                 model.contacts = this.contactRepository.getAll("name_desc", "");
+                model.processes = this.typeOfRepository.getAll("name_desc", "");
                 model.courtTypes = Enum.GetValues(typeof(TipSuda)).Cast<TipSuda>()
                                     .ToDictionary(e => (int)e, e => e.ToString());
-                model.processes = this.typeOfRepository.getAll("name_desc", "");
+                                    
                 return model;
             }
             return null;

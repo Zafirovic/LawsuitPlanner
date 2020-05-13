@@ -8,8 +8,8 @@ namespace Application.Models.DataLayer
         IEnumerable<Company> getAll(string sortOrder, string searchString);
         IEnumerable<Company> getAll();
 
-        Company add(Company company);
-        Company update(Company company);
-        Company delete(int id);
+        void add(Company company);
+        void update(Company company);
+        void delete(int id);
     }
 }

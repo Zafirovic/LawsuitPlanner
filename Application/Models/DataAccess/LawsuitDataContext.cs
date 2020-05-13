@@ -26,6 +26,7 @@ namespace Application.Models.DataAccess
                 relationship.DeleteBehavior = DeleteBehavior.Cascade;
             }
 
+            //setting up a many to many relationship between lawsuits and lawyers
             builder.Entity<LawsuitLawyer>()
                     .HasOne(x => x.lawsuit)
                     .WithMany(l => l.lawyers)

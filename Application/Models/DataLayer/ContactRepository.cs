@@ -14,14 +14,13 @@ namespace Application.Models.DataLayer
             this.context = context;
         }
 
-        public Contact add(Contact contact)
+        public void add(Contact contact)
         {
             context.Contacts.Add(contact);
             context.SaveChanges();
-            return contact;
         }
 
-        public Contact delete(int id)
+        public void delete(int id)
         {
             Contact contact = context.Contacts.Find(id);
             if (contact != null)
@@ -29,7 +28,6 @@ namespace Application.Models.DataLayer
                 context.Contacts.Remove(contact);
                 context.SaveChanges();
             }
-            return contact;
         }
 
         public Contact get(int id)
@@ -37,6 +35,7 @@ namespace Application.Models.DataLayer
             return context.Contacts.Find(id);
         }
 
+        //returning sorted or/and searched contacts
         public IEnumerable<Contact> getAll(string sortOrder, string searchString)
         {
             IEnumerable<Contact> contacts = context.Contacts;
@@ -61,12 +60,11 @@ namespace Application.Models.DataLayer
             }
         }
 
-        public Contact update(Contact contact)
+        public void update(Contact contact)
         {
             var kon = context.Contacts.Attach(contact);
             kon.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             context.SaveChanges();
-            return contact;
         }
     }
 }

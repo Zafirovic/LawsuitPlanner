@@ -39,7 +39,7 @@
             <tbody class="cityTable">
                 @if(Model.locations.Any())
                 {
-                    @foreach(var city in Model.locations.Reverse())
+                    foreach(var city in Model.locations.Reverse())
                     {
                         <tr>
                             <td>@city.id</td>
@@ -69,8 +69,8 @@
 <script>
 $('#searchCity').submit(function(e){
     e.preventDefault();
-    var searchInput = $('#cityInput').val();
-    if (searchInput.length < 1)
+    
+    if ($('#cityInput').val().length < 1)
     {
         alert("Morate uneti vrednost za pretragu");
         return false;

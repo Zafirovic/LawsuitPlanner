@@ -64,13 +64,5 @@ namespace Application.Controllers
             }
             return cityName;
         }
-
-        [AcceptVerbs("Post", "Get")]
-        public ActionResult UsedName(string cityName)
-        {
-            var grad = locationRepository.get(cityName);
-            
-            return grad == null ? Json(true) : Json($"Grad sa nazivom {cityName} vec postoji");
-        }
     }
 }

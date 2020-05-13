@@ -18,7 +18,7 @@ namespace Application.Controllers
         }
 
         [HttpGet]
-        public ActionResult ListCompanies(string sortOrder, string SearchString)
+        public ViewResult ListCompanies(string sortOrder, string SearchString)
         {   
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["CurrentFilter"] = String.IsNullOrEmpty(SearchString) ? "" : SearchString;

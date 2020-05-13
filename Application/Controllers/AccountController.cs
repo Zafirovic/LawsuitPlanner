@@ -40,7 +40,6 @@ namespace Application.Controllers
                 };
 
                 var result = await userManager.CreateAsync(user, model.repeatPassword);
-                
 
                 if (result.Succeeded)
                 {

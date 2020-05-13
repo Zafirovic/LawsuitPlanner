@@ -14,14 +14,13 @@ namespace Application.Models.DataLayer
             this.context = context;
         }
 
-        public Location add(Location location)
+        public void add(Location location)
         {
             context.Locations.Add(location);
             context.SaveChanges();
-            return location;
         }
 
-        public Location delete(int id)
+        public void delete(int id)
         {
             Location location = context.Locations.Find(id);
             if (location != null)
@@ -29,19 +28,11 @@ namespace Application.Models.DataLayer
                 context.Locations.Remove(location);
                 context.SaveChanges();
             }
-            return location;
         }
 
         public Location get(int id)
         {
             return context.Locations.Find(id);
-        }
-
-        public Location get(string cityName)
-        {
-            return (from a in context.Locations 
-                    where a.cityName == cityName
-                    select a).FirstOrDefault();
         }
 
         public IEnumerable<Location> getAll(string sortOrder, string searchString)
@@ -62,12 +53,11 @@ namespace Application.Models.DataLayer
             }
         }
 
-        public Location update(Location location)
+        public void update(Location location)
         {
             var lok = context.Locations.Attach(location);
             lok.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             context.SaveChanges();
-            return location;
         }
     }
 }

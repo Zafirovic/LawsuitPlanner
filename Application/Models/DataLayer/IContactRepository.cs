@@ -6,8 +6,8 @@ namespace Application.Models.DataLayer
     {
         Contact get(int id);
         IEnumerable<Contact> getAll(string sortOrder, string searchString);
-        Contact add(Contact contact);
-        Contact update(Contact contact);
-        Contact delete(int id);
+        void add(Contact contact);
+        void update(Contact contact);
+        void delete(int id);
     }
 }

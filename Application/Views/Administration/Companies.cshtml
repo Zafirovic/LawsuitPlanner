@@ -37,7 +37,7 @@
             <thead>
                 <tr>
                     <th>Id kompanije</th>
-                    <th role="button" onclick="searchCompany('@ViewBag.NameSortParm')" style="color: #336699;">
+                    <th role="button" onclick="sortCompany('@ViewBag.NameSortParm')" style="color: #336699;">
                         Naziv kompanije
                     </th> 
                     <th>Adresa kompanije</th>
@@ -46,7 +46,7 @@
             <tbody class="companyTable">
                 @if(Model.companies.Any())
                 {   
-                    @foreach(var company in Model.companies.Reverse())
+                    foreach(var company in Model.companies.Reverse())
                     {
                         <tr>
                             <td>@company.id</td>
@@ -75,17 +75,17 @@
 </div>
 
 <script>
-$('#searchCompany').submit(function(e){
-    e.preventDefault();
-    var searchInput = $('#companyInput').val();
-    if (searchInput.length < 1)
-    {
-        alert("Morate uneti vrednost za pretragu");
-        return false;
-    }
-    else
-    {
-        $('#searchCompany')[0].submit();
-    }
-})
+    $('#searchCompany').submit(function(e){
+        e.preventDefault();
+        var searchInput = $('#companyInput').val();
+        if (searchInput.length < 1)
+        {
+            alert("Morate uneti vrednost za pretragu");
+            return false;
+        }
+        else
+        {
+            $('#searchCompany')[0].submit();
+        }
+    })
 </script>

@@ -29,16 +29,8 @@ function insertCity()
     var city = $(".cityInput").val();
     $(".insertedCity").hide();
 
-    if (city == "")
-    {
-        alert("Potrebno je da unesete naziv grada");
-        return;
-    }
-    else if (city.length > 40)
-    {
-        alert("Naziv grada ne moze imati vise od 40 karaktera");
-        return;
-    }
+    //validating city inputs
+    cityInsertValidation(city);
 
     $.ajax({
         type: "POST",
@@ -80,17 +72,9 @@ function deleteCity(id)
 function changeCity(id)
 {
     var name = $("#"+id).html();
-    if (name.length == 0)
-    {
-        alert("Polje ne sme ostati prazno. Postavlja se na izmeni dok ne izvrsite promenu");
-        $("#"+id).html("Izmeni");
-        return;
-    }
-    else if (name.length > 40)
-    {
-        alert("Naziv grada ne moze imati vise od 40 karaktera");
-        return;
-    }
+
+    //validating city inputs for update
+    changeCityValidation(name);
 
     $.ajax({
         type: "post",
@@ -106,4 +90,33 @@ function changeCity(id)
             alert(error);
         }
     });
+}
+
+function cityInsertValidation(city)
+{
+    if (city == "")
+    {
+        alert("Potrebno je da unesete naziv grada");
+        return;
+    }
+    else if (city.length > 40)
+    {
+        alert("Naziv grada ne moze imati vise od 40 karaktera");
+        return;
+    }
+}
+
+function changeCityValidation(name)
+{
+    if (name.length == 0)
+    {
+        alert("Polje ne sme ostati prazno. Postavlja se na izmeni dok ne izvrsite promenu");
+        $("#"+id).html("Izmeni");
+        return;
+    }
+    else if (name.length > 40)
+    {
+        alert("Naziv grada ne moze imati vise od 40 karaktera");
+        return;
+    }
 }

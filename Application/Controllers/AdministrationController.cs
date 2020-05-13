@@ -258,34 +258,41 @@ namespace Application.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUser(EditUserViewModel model)
         {
-            var user = await userManager.FindByIdAsync(model.Id);
-
-            if(user == null)
+            if(ModelState.IsValid)
             {
-                ViewBag.ErrorMessage = $"Korisnik sa id = {model.Id} ne postoji u sistemu.";
-                return View("NotFound");
-            }
-            else
-            {
-                user.name = model.name;
-                user.surname = model.surname;
-                user.Email = model.email;
-                user.UserName = model.UserName;
+                var user = await userManager.FindByIdAsync(model.Id);
 
-                var result =  await userManager.UpdateAsync(user);
-
-                if(result.Succeeded)
+                if(user == null)
                 {
-                    return RedirectToAction("ListUsers");
+                    ViewBag.ErrorMessage = $"Korisnik sa id = {model.Id} ne postoji u sistemu.";
+                    return View("NotFound");
                 }
-
-                foreach(var error in result.Errors)
+                else
                 {
-                    ModelState.AddModelError("", error.Description);
-                }
+                    user.name = model.name;
+                    user.surname = model.surname;
+                    user.Email = model.email;
+                    user.UserName = model.UserName;
+                    if (model.password != null)
+                    {
+                        await userManager.RemovePasswordAsync(user);
+                        await userManager.AddPasswordAsync(user, model.password);
+                    }
 
-                return View(model);
+                    var result =  await userManager.UpdateAsync(user);
+
+                    if(result.Succeeded)
+                    {
+                        return RedirectToAction("ListUsers");
+                    }
+
+                    foreach(var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
             }
+            return View(model);
         }
 
         [HttpPost]

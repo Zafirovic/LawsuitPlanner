@@ -29,16 +29,7 @@ function insertTypeOfProcess()
     var process = $(".processInput").val();
     $(".insertedTypeOfProcess").hide();
 
-    if(process == "")
-    {
-        alert("Potrebno je da unesete naziv postupka");
-        return;
-    }
-    else if (process.length > 40)
-    {
-        alert("Tip postupka ne moze imati vise od 40 karaktera");
-        return;
-    }
+    typeOfProcInsertValidation(process);
     
     $.ajax({
         type: "POST",
@@ -80,17 +71,9 @@ function deleteTypeOfProcess(id)
 function changeTypeOfProcess(id)
 {
     var name = $("#"+id).html();
-    if (name.length == 0)
-    {
-        alert("Polje ne sme ostati prazno. Postavlja se na izmeni dok ne izvrsite promenu");
-        $("#"+id).html("Izmeni");
-        return;
-    }
-    else if (name.length > 40)
-    {
-        alert("Tip postupka ne moze imati vise od 40 karaktera");
-        return;
-    }
+
+    changeTypeOfProcValidation(name)
+    
     $.ajax({
         type: "post",
         url: "/TypeOfProcess/EditTypeOfProcess",
@@ -105,4 +88,33 @@ function changeTypeOfProcess(id)
             alert(error);
         }
     });
+}
+
+function typeOfProcInsertValidation(process)
+{
+    if(process == "")
+    {
+        alert("Potrebno je da unesete naziv postupka");
+        return;
+    }
+    else if (process.length > 40)
+    {
+        alert("Tip postupka ne moze imati vise od 40 karaktera");
+        return;
+    }
+}
+
+function changeTypeOfProcValidation(name)
+{
+    if (name.length == 0)
+    {
+        alert("Polje ne sme ostati prazno. Postavlja se na izmeni dok ne izvrsite promenu");
+        $("#"+id).html("Izmeni");
+        return;
+    }
+    else if (name.length > 40)
+    {
+        alert("Tip postupka ne moze imati vise od 40 karaktera");
+        return;
+    }
 }

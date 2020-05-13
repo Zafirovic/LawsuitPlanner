@@ -6,10 +6,12 @@ namespace Application.ViewModel
     public class RegisterViewModel
     {
         [Required(ErrorMessage = "Potrebno je da unesete ime.")]
+        [StringLength(30)]
         [Display(Name = "Ime")]
         public string name { get; set; }
 
         [Required(ErrorMessage = "Potrebno je da unesete prezime.")]
+        [StringLength(30)]
         [Display(Name = "Prezime")]
         public string surname { get; set; }
         

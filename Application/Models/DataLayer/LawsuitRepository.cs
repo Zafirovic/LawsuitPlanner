@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using Application.Models.DataAccess;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Globalization;
 
 namespace Application.Models.DataLayer
 {
@@ -23,30 +21,12 @@ namespace Application.Models.DataLayer
             this.typeOfProcessRepository = tRepository;
         }
 
-        public Lawsuit add(Lawsuit lawsuit)
-        {
-            context.Lawsuits.Add(lawsuit);
-            context.SaveChanges();
-            return lawsuit;
-        }
-
-        public Lawsuit delete(int id)
-        {
-            Lawsuit lawsuit = context.Lawsuits.Find(id);
-            if (lawsuit != null)
-            {
-                context.Lawsuits.Remove(lawsuit);
-                context.SaveChanges();
-            }
-            return lawsuit;
-        }
-
         public Lawsuit get(int id)
         {
             return context.Lawsuits.Find(id);
         }
 
-        //vraca parnice samo za trenutno ulogovanog korisnika(advokata)
+        //returning lawsuits only for currently logged in user/lawyer
         public IEnumerable<Lawsuit> getForLawyer(string id, string sortOrder, string searchString)
         {
             List<LawsuitLawyer> lawyerLawsuits = (from l in context.LawsuitLawyers
@@ -112,13 +92,28 @@ namespace Application.Models.DataLayer
             }
             return lawsuits;
         }
+        
+        public void add(Lawsuit lawsuit)
+        {
+            context.Lawsuits.Add(lawsuit);
+            context.SaveChanges();
+        }
 
-        public Lawsuit update(Lawsuit lawsuit)
+        public void delete(int id)
+        {
+            Lawsuit lawsuit = context.Lawsuits.Find(id);
+            if (lawsuit != null)
+            {
+                context.Lawsuits.Remove(lawsuit);
+                context.SaveChanges();
+            }
+        }
+
+        public void update(Lawsuit lawsuit)
         {
             var par = context.Lawsuits.Attach(lawsuit);
             par.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             context.SaveChanges();
-            return lawsuit;
         }
     }
 }

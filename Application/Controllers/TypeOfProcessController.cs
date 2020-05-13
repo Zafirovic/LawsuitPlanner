@@ -62,13 +62,5 @@ namespace Application.Controllers
             }
             return processName;
         }
-
-        [AcceptVerbs("Post", "Get")]
-        public ActionResult UsedTypeOfProcess(string processName)
-        {
-            var process = processRepository.get(processName);
-            
-            return process == null ? Json(true) : Json($"Grad sa nazivom {processName} vec postoji");
-        }
     }
 }

@@ -1,14 +1,16 @@
+//returning lawsuits for admin review
 $.ajax({
-    url: '/User/CalendarLawsuits',
+    url: '/Lawsuit/ListLawsuitsAdmin',
     type: "GET",
     success: function(data){
-        $("#calen").html(data);
+        $("#parnica").html(data);
     },
     error: function(err){
         console.log(err);
     }
 })
 
+//appending ListLawuits partial view to LawsuitManagement view
 $.ajax({
     url: '/Lawsuit/ListLawsuits',
     type: "GET",
@@ -20,7 +22,20 @@ $.ajax({
     }
 })
 
-function searchLawsuit(sortOption)
+//appending CalendarLawsuit partial view to LawsuitManagement view
+$.ajax({
+    url: '/User/CalendarLawsuits',
+    type: "GET",
+    success: function(data){
+        $("#calen").html(data);
+    },
+    error: function(err){
+        console.log(err);
+    }
+})
+
+//sorting when <th> is clicked in the table
+function sortLawsuit(sortOption)
 {
     $.ajax({
         url: '/Lawsuit/ListLawsuits',
@@ -35,14 +50,17 @@ function searchLawsuit(sortOption)
     })
 }
 
+//validation and lawsuit insertion into the database 
 function insertLawsuit()
 {
     var errors = lawsuitInsertValidation();
+
     if (errors != null && errors.length > 0)
     {
         alert(errors);
         return;
     }
+
     var date = $("#datepicker").val();
     var time = $('#timepicker').val();
     var dateArray = date.split("-");
@@ -50,6 +68,7 @@ function insertLawsuit()
 
     var datetime = moment({ year: dateArray[0], month: dateArray[1] - 1, day: dateArray[2], 
         hour: timeArray[0], minute: timeArray[1] }).format();
+        
     var lawyers = $(".lawsuitLawyers").val();
 
     $(".insertedLawsuit").hide();
@@ -75,7 +94,7 @@ function insertLawsuit()
             if (data != null)
             {
                 var date = new Date(Date.parse(data.dateTimeOfEvent)).toLocaleString('sr-Latn-RS');
-                lawsuit = "<tr><td><span class="+data.id+"contenteditable>"+date+"</span></td><td>"+
+                lawsuit = "<tr><td><span class="+data.id+" contenteditable>"+date+"</span></td><td>"+
                         "<span class="+data.id+">"+locationSelectionFill(data.locations, data.id)+"</span></td><td>"+
                         "<span class="+data.id+">"+judgeSelectionFill(data.contacts, data.id)+"</span></td><td>"+
                         "<span class="+data.id+">"+courtTypeSelectionFill(data.courtTypes, data.id)+"</span></td><td>"+
@@ -136,26 +155,7 @@ function changeLawsuit(id)
     var courtroomNum = lawsuit.eq(5).html();
     var note = lawsuit.eq(8).html();
     
-    if (processId.length == 0 || processId.length > 15)
-    {
-        alert("Nema identifikatora ili je premasen limit od 15 karaktera. Postavlja se na izmeni dok ne izvrsite izmenu");
-        lawsuit.eq(4).html("Izmeni");
-        return;
-    }
-
-    if (courtroomNum.length == 0 || courtroomNum.length > 5)
-    {
-        alert("Nema identifikatora ili je premasen limit od 15 karaktera. Postavlja se na -- dok ne izvrsite izmenu");
-        lawsuit.eq(5).html("--");
-        return;
-    }
-
-    if (note.length == 0 || note.length > 30)
-    {
-        alert("Nema napomene ili je premasen limit od 30 karaktera. Postavlja se na izmeni dok ne izvrsite izmenu");
-        lawsuit.eq(8).html("Izmeni");
-        return;
-    }
+    changeLawsuitValidation(processId, courtroomNum, note);
 
     var data = {
         id: id,
@@ -184,6 +184,7 @@ function changeLawsuit(id)
     });
 }
 
+//select tags for lawsuit filling
 function locationSelectionFill(locations, lawsuitId)
 {
     var selection = "<select class="+lawsuitId+">";
@@ -289,6 +290,7 @@ function processTypeSelectionFill(processTypes, lawsuitId)
     return selection;
 }
 
+//Validation for insertion and updating
 function lawsuitInsertValidation()
 {
     var errors = [];
@@ -303,9 +305,9 @@ function lawsuitInsertValidation()
         errors.push("Morate uneti identifikator parnice");
         return errors;
     }
-    if ($("#lawsuitCourtroom").val() == '')
+    if ($("#lawsuitCourtroom").val() == '' || $("#lawsuitCourtroom").val().length > 5)
     {
-        errors.push("Morate uneti broj sudnice");
+        errors.push("Morate uneti broj sudnice ili broj sudnice ima vise od 5 karaktera");
         return errors;
     }
     if ($(".lawsuitLocation").children("option:selected").html() == "Izaberite lokaciju" ||
@@ -325,5 +327,28 @@ function lawsuitInsertValidation()
         errors.push("Niste izabrali nijednog advokata");
         return errors;
     }
+}
 
+function changeLawsuitValidation(processId, courtroomNum, note)
+{
+    if (processId.length == 0 || processId.length > 15)
+    {
+        alert("Nema identifikatora ili je premasen limit od 15 karaktera. Postavlja se na izmeni dok ne izvrsite izmenu");
+        lawsuit.eq(4).html("Izmeni");
+        return;
+    }
+
+    if (courtroomNum.length == 0 || courtroomNum.length > 5)
+    {
+        alert("Nema identifikatora ili je premasen limit od 15 karaktera. Postavlja se na -- dok ne izvrsite izmenu");
+        lawsuit.eq(5).html("--");
+        return;
+    }
+
+    if (note.length == 0 || note.length > 30)
+    {
+        alert("Nema napomene ili je premasen limit od 30 karaktera. Postavlja se na izmeni dok ne izvrsite izmenu");
+        lawsuit.eq(8).html("Izmeni");
+        return;
+    }
 }

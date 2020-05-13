@@ -1,12 +1,15 @@
+//data will keep all lawsuits for currently logged in user/lawyer
 var data = [];
+//ajaxData receives all lawsuits that needs to be parsed for calendar
 var ajaxData = [];
 
+//returning all lawsuits
 $.ajax({
   url: '/Lawsuit/ListLawsuitsCalendar',
   type: "GET",
   async: false,
-  success: function(d){
-      ajaxData = d;
+  success: function(data){
+      ajaxData = data;
     },
   error: function(err){
       console.log(err);
@@ -69,7 +72,8 @@ $.ajax({
 
   Calendar.prototype.drawMonth = function() {
     var self = this;
-    
+
+    //here are all events appended to the calendar 
     this.events.forEach(function(ev) {
      ev.date = self.current.clone().date(ev.datumDan).month(ev.datumMesec-1).year(ev.datumGodina);
     });
@@ -343,16 +347,19 @@ $.ajax({
   }
   
   ajaxData.forEach(addE);
+
   function addE(item) {
     var date = new Date(Date.parse(item.dateTimeOfEvent)).toLocaleString();
     splitedDateTime = date.split(",");
     date = splitedDateTime[0].split("/");
     time = splitedDateTime[1].split(":");
+
     data.push({eventName: "Vreme: " + splitedDateTime[1] + ", " + item.typeOfProcess.name + ", Tuzilac: " +
                item.prosecutor.name + ", Tuzenik: " + item.defendant.name + ", Sudija: " + item.judge.name + ", Napomena: " +
                item.note + ", Broj sudnice: " + item.courtroomNumber + ". ", calendar: 'Work', color: 'orange', datumDan: date[1],
                datumMesec: date[0], datumGodina: date[2], id: item.id})
   }  
+  
   var calendar = new Calendar('#calendar', data);
 
 }();

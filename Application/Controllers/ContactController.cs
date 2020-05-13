@@ -20,7 +20,7 @@ namespace Application.Controllers
         }
 
         [HttpGet]
-        public ActionResult ListContacts(string sortOrder, string SearchString)
+        public ViewResult ListContacts(string sortOrder, string SearchString)
         {   
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["CurrentFilter"] = String.IsNullOrEmpty(SearchString) ? "" : SearchString;
@@ -35,7 +35,7 @@ namespace Application.Controllers
         [HttpPost]
         public ContactCompanyViewModel CreateContact(ContactCompanyViewModel model)
         {
-            Contact contact = new Contact()
+            Contact contact = new Contact
             {
                 name = model.name + " " + model.surname,
                 phone1 = model.phone1,
@@ -46,8 +46,9 @@ namespace Application.Controllers
                 job = model.job,
                 company = companyRepository.get(model.companyId),
             };
-
             this.contactRepository.add(contact);
+            
+            model.id = contact.id;
             model.companies = this.companyRepository.getAll();
             model.name = contact.name;
 

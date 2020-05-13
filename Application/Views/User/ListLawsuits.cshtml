@@ -133,7 +133,10 @@
                             {
                                 @foreach(var lawyer in Model.lawyers)
                                 {
-                                    <option value=@lawyer.Id>@lawyer.name @lawyer.surname</option>
+                                    if (lawyer.name != "Administrator")
+                                    {
+                                        <option value=@lawyer.Id>@lawyer.name @lawyer.surname</option>
+                                    }
                                 }
                             }
                             </select>
@@ -158,7 +161,7 @@
         <table class="table table-striped table-responsive-md btn-table">
             <thead>
                 <tr>
-                    <th role="button" onclick="searchLawsuit('@ViewBag.DateTimeSortParm')" style="color: #336699;">
+                    <th role="button" onclick="sortLawsuit('@ViewBag.DateTimeSortParm')" style="color: #336699;">
                         Datum i vreme
                     </th> 
                     <th>Lokacija</th>

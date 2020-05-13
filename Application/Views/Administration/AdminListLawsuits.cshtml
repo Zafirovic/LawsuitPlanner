@@ -25,7 +25,7 @@
             <tbody class="lawsuitTable">
                 @if(Model.lawsuits.Any())
                 {
-                    @foreach(var lawsuit in Model.lawsuits.Reverse())
+                    foreach(var lawsuit in Model.lawsuits.Reverse())
                     {
                         <tr>
                             <td><span class=@lawsuit.id contenteditable>@lawsuit.dateTimeOfEvent.ToString("dd.MM.yyyy HH:mm:ss", new System.Globalization.CultureInfo("sr-Latn-RS"))</span></td>

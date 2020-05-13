@@ -30,30 +30,21 @@ function insertContact()
     var prezime = $("#contactSurname").val();
     var phone1 = $("#contactPhone1").val();
     var phone2 = $("#contactPhone2").val();
+    var noData = "Nema podataka";
 
-    if(ime == "" || prezime == "")
-    {
-        alert("Morate uneti ime i prezime kontakta!");
-        return;
-    }
-
-    if (phone1.length > 10 || phone2.length > 10)
-    {
-        alert("Broj telefona ne moze imati vise od 10 cifara!");
-        return;
-    }
-    
+    contactInsertValidation(ime, prezime, phone1, phone2);
+   
     $(".insertedContact").hide();
 
     var data = {
         name: ime,
         surname: prezime,
-        phone1: $("#contactPhone1").val() == "" ? "--" : $("#contactPhone1").val(),
-        phone2: $("#contactPhone2").val() == "" ? "--" : $("#contactPhone2").val(),
-        address: $("#contactAddress").val() == "" ? "Nema podataka" : $("#contactAddress").val(),
-        email: $("#contactEmail").val() == "" ? "Nema podataka" : $("#contactEmail").val(),
+        phone1: $("#contactPhone1").val() == "" ? "--" : phone1,
+        phone2: $("#contactPhone2").val() == "" ? "--" : phone2,
+        address: $("#contactAddress").val() == "" ? noData : $("#contactAddress").val(),
+        email: $("#contactEmail").val() == "" ? noData : $("#contactEmail").val(),
         legalPerson: $("#contactCheck").is(':checked'),
-        job: $("#contactJob").val() == "" ? "Nema podataka" : $("#contactJob").val(),
+        job: $("#contactJob").val() == "" ? noData : $("#contactJob").val(),
         companyId: $(".contactsCompany").children("option:selected").val(),
         contacts: null,
         companies: null
@@ -83,7 +74,7 @@ function insertContact()
                         "<span class="+data.id+" contenteditable>"+data.address+"</span></td><td>"+
                         "<span class="+data.id+" contenteditable>"+data.email+"</span></td><td>"+
                         "<span class="+data.id+" contenteditable>"+data.job+"</span></td><td>"+
-                        "<span>"+companySelectionFill(data.companies, comp, data.id)+"</span></td><td>"+
+                        "<span class="+data.id+">"+companySelectionFill(data.companies, comp, data.id)+"</span></td><td>"+
                         "<span class="+data.id+" contenteditable>Pravno lice</span><input type='checkbox'"+checked+" class="+data.id+"></input></td><td>"+
                         "<button type='button' class='btn btn-outline-primary waves-effect'"+
                         "onclick='changeContact("+data.id+")'>Izmeni</button></td>"+
@@ -141,7 +132,6 @@ function changeContact(id)
     var data = {
         id: id,
         name: name,
-        surname: "",
         phone1: phone1,
         phone2: phone2,
         address: contact.eq(3).html(),
@@ -149,10 +139,7 @@ function changeContact(id)
         job: contact.eq(5).html(),
         companyId: contact.find(":selected").val(),
         legalPerson: contact.eq(8).is(":checked"),
-        contacts: null,
-        companies: null
     };
-    console.log(data);
 
     $.ajax({
         type: "POST",
@@ -192,4 +179,20 @@ function companySelectionFill(companies, selectedComp, contactId)
         });
     }
     return selection;
+}
+
+function contactInsertValidation(ime, prezime, phone1, phone2)
+{
+    if(ime == "" || prezime == "")
+    {
+        alert("Morate uneti ime i prezime kontakta!");
+        return;
+    }
+
+    if (phone1.length > 10 || phone2.length > 10)
+    {
+        alert("Broj telefona ne moze imati vise od 10 cifara!");
+        return;
+    }
+    
 }
