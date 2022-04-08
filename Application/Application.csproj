@@ -9,6 +9,6 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.1.2" />
     <PackageReference Include="AspNet.ScriptManager.jQuery.UI.Combined" Version="1.12.1" />
-    <PackageReference Include="Moment.js" Version="2.24.0" />
+    <PackageReference Include="Moment.js" Version="2.29.2" />
   </ItemGroup>
 </Project>
